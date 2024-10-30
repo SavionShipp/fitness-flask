@@ -21,3 +21,10 @@ def create():
     type = request.form.get("type")
     duration = request.form.get("duration")
     return db.workouts_create(name, type, duration)
+
+@app.route("/workouts/<id>.json", methods=["PATCH"])
+def update(id):
+    name = request.form.get("name")
+    type = request.form.get("type")
+    duration = request.form.get("duration")
+    return db.workouts_update_by_id(id, name, type, duration)

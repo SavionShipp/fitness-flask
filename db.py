@@ -80,3 +80,17 @@ def workouts_create(name, type, duration):
     ).fetchone()
     conn.commit()
     return dict(row)
+
+def workouts_update_by_id(id):
+    conn = connect_to_db()
+    row = conn.execute(
+         """
+        UPDATE workouts SET name = ?, type = ?, duration = ?
+        WHERE id = ?
+        RETURNING *
+        """,
+        (name, type, duration, id),
+    ).fetchone()
+    conn.commit()
+    return dict(row)
+    
