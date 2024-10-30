@@ -67,3 +67,16 @@ def workouts_find_by_id(id):
         (id,),
     ).fetchone()
     return dict(row)
+
+def workouts_create(name, type, duration):
+    conn = connect_to_db()
+    row = conn.execute(
+        """
+        INSERT INTO workouts (name, type, duration)
+        VALUES (?, ?, ?)
+        RETURNING *
+        """,
+        (name, type, duration),
+    ).fetchone()
+    conn.commit()
+    return dict(row)

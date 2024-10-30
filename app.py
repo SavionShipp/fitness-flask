@@ -14,3 +14,10 @@ def index():
 @app.route("/workouts/<id>.json")
 def show(id):
     return db.workouts_find_by_id(id)
+
+@app.route("/workouts.json", methods=["POST"])
+def create():
+    name = request.form.get("name")
+    type = request.form.get("type")
+    duration = request.form.get("duration")
+    return db.workouts_create(name, type, duration)
