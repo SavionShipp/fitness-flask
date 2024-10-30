@@ -93,4 +93,17 @@ def workouts_update_by_id(id):
     ).fetchone()
     conn.commit()
     return dict(row)
+
+def workouts_destroy_by_id(id):
+    conn = connect_to_db()
+    row = conn.execute(
+              """
+        DELETE from workouts
+        WHERE id = ?
+        """,
+        (id,),
+    )
+    conn.commit()
+    return {"message": "Workout destroyed successfully"}
+    
     
