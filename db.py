@@ -56,3 +56,14 @@ def workouts_all():
         """
     ).fetchall()
     return [dict(row) for row in rows]
+
+def workouts_find_by_id(id):
+    conn = connect_to_db()
+    row = conn.execute(
+        """
+        SELECT * FROM workouts
+        WHERE id = ?
+        """,
+        (id,),
+    ).fetchone()
+    return dict(row)
