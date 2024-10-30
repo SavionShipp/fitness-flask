@@ -81,18 +81,25 @@ def workouts_create(name, type, duration):
     conn.commit()
     return dict(row)
 
-def workouts_update_by_id(id):
+def workouts_update_by_id(id, name, type, duration):
     conn = connect_to_db()
-    row = conn.execute(
-         """
-        UPDATE workouts SET name = ?, type = ?, duration = ?
-        WHERE id = ?
-        RETURNING *
-        """,
-        (name, type, duration, id),
-    ).fetchone()
-    conn.commit()
-    return dict(row)
+    try:
+        row = conn.execute(
+            """
+            UPDATE workouts SET name = ?, type = ?, duration = ?
+            WHERE id = ?
+            RETURNING *
+            """,
+            (name, type, duration, id),
+        ).fetchone()
+        conn.commit()
+    except Exception as e:
+        conn.rollback()
+        raise e
+    finally:
+        conn.close()  
+    return dict(row) if row else None
+
 
 def workouts_destroy_by_id(id):
     conn = connect_to_db()
@@ -106,4 +113,15 @@ def workouts_destroy_by_id(id):
     conn.commit()
     return {"message": "Workout destroyed successfully"}
     
-    
+    # def workouts_update_by_id(id):
+#     conn = connect_to_db()
+#     row = conn.execute(
+#          """
+#         UPDATE workouts SET name = ?, type = ?, duration = ?
+#         WHERE id = ?
+#         RETURNING *
+#         """,
+#         (name, type, duration, id),
+#     ).fetchone()
+#     conn.commit()
+#     return dict(row)
