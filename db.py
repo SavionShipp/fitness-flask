@@ -33,29 +33,6 @@ workouts_seed_data = [
         ("3rd workout", "back", "3min"),
     ]
 
-def connect_to_db():
-    return sqlite3.connect("your_database.db")
-
-# Function to seed the workouts data
-def seed_workouts():
-    conn = connect_to_db()
-    cursor = conn.cursor()
-
-    for name, muscle_group, duration in workouts_seed_data:
-        cursor.execute(
-            "INSERT INTO workouts (name, muscle group, duration) VALUES (?, ?, ?)",
-            (name, muscle_group, duration)
-        )
-    conn.commit()
-    conn.close()
-    print("Database seeded with workout data!")
-
-if __name__ == "__main__":
-    seed_workouts()
-
-if __name__ == "__main__":
-    seed_workouts()
-
 if __name__ == "__main__":
     initial_setup()
 
@@ -136,3 +113,29 @@ def workouts_destroy_by_id(id):
 #     ).fetchone()
 #     conn.commit()
 #     return dict(row)
+
+# workouts_seed_data = [
+#         ("1st workout", "arms", "1min"),
+#         ("2nd workout", "legs", "2min"),
+#         ("3rd workout", "back", "3min"),
+#     ]
+
+# def connect_to_db():
+#     return sqlite3.connect("your_database.db")
+
+# # Function to seed the workouts data
+# def seed_workouts():
+#     conn = connect_to_db()
+#     cursor = conn.cursor()
+
+#     for name, muscle_group, duration in workouts_seed_data:
+#         cursor.execute(
+#             "INSERT INTO workouts (name, muscle group, duration) VALUES (?, ?, ?)",
+#             (name, muscle_group, duration)
+#         )
+#     conn.commit()
+#     conn.close()
+#     print("Database seeded with workout data!")
+
+# if __name__ == "__main__":
+#     seed_workouts()
