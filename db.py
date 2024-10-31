@@ -1,4 +1,5 @@
 import sqlite3
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 def connect_to_db():
@@ -14,6 +15,16 @@ def initial_setup():
         DROP TABLE IF EXISTS workouts;
         """
     )
+    conn.execute(
+        """
+        CREATE TABLE users (
+          id INTEGER PRIMARY KEY NOT NULL,
+          name TEXT NOT NULL UNIQUE,
+          password TEXT NOT NULL
+        );
+        """
+    )
+
     conn.execute(
         """
         CREATE TABLE workouts (
