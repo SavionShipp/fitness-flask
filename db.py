@@ -19,7 +19,7 @@ def initial_setup():
         CREATE TABLE workouts (
           id INTEGER PRIMARY KEY NOT NULL,
           name TEXT,
-          type TEXT,
+          muscle_group TEXT,
           duration INTERVAL
         );
         """
@@ -56,7 +56,7 @@ def workouts_find_by_id(id):
     ).fetchone()
     return dict(row)
 
-def workouts_create(name, type, duration):
+def workouts_create(name, muscle_group, duration):
     conn = connect_to_db()
     row = conn.execute(
         """
@@ -64,12 +64,12 @@ def workouts_create(name, type, duration):
         VALUES (?, ?, ?)
         RETURNING *
         """,
-        (name, type, duration),
+        (name, muscle_group, duration),
     ).fetchone()
     conn.commit()
     return dict(row)
 
-def workouts_update_by_id(id, name, type, duration):
+def workouts_update_by_id(id, name, muscle_group, duration):
     conn = connect_to_db()
     try:
         row = conn.execute(
@@ -78,7 +78,7 @@ def workouts_update_by_id(id, name, type, duration):
             WHERE id = ?
             RETURNING *
             """,
-            (name, type, duration, id),
+            (name, muscle_group, duration, id),
         ).fetchone()
         conn.commit()
     except Exception as e:
