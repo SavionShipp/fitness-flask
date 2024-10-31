@@ -19,19 +19,31 @@ def initial_setup():
         CREATE TABLE workouts (
           id INTEGER PRIMARY KEY NOT NULL,
           name TEXT,
-          muscle_group TEXT,
-          duration INTERVAL
+          muscle_group INTEGER,
+          duration INTEVAL
         );
         """
     )
     conn.commit()
     print("Table created successfully")
 
-workouts_seed_data = [
-        ("1st workout", "arms", "1min"),
-        ("2nd workout", "legs", "2min"),
-        ("3rd workout", "back", "3min"),
+    workouts_seed_data = [
+        ("1st workout", 'arms', '1 minute'),
+        ("2nd workout", 'back', '2 minutes'),
+        ("3rd workout", 'legs', '3 minutes'),
     ]
+    conn.executemany(
+        """
+        INSERT INTO workouts (name, muscle_group, duration)
+        VALUES (?,?,?)
+        """,
+        workouts_seed_data,
+    )
+    conn.commit()
+    print("Seed data created successfully")
+
+    conn.close()
+
 
 if __name__ == "__main__":
     initial_setup()
@@ -60,7 +72,7 @@ def workouts_create(name, muscle_group, duration):
     conn = connect_to_db()
     row = conn.execute(
         """
-        INSERT INTO workouts (name, muscle group, duration)
+        INSERT INTO workouts (name, muscle_group, duration)
         VALUES (?, ?, ?)
         RETURNING *
         """,
@@ -74,7 +86,7 @@ def workouts_update_by_id(id, name, muscle_group, duration):
     try:
         row = conn.execute(
             """
-            UPDATE workouts SET name = ?, muscle group = ?, duration = ?
+            UPDATE workouts SET name = ?, muscle_group = ?, duration = ?
             WHERE id = ?
             RETURNING *
             """,
@@ -119,23 +131,3 @@ def workouts_destroy_by_id(id):
 #         ("2nd workout", "legs", "2min"),
 #         ("3rd workout", "back", "3min"),
 #     ]
-
-# def connect_to_db():
-#     return sqlite3.connect("your_database.db")
-
-# # Function to seed the workouts data
-# def seed_workouts():
-#     conn = connect_to_db()
-#     cursor = conn.cursor()
-
-#     for name, muscle_group, duration in workouts_seed_data:
-#         cursor.execute(
-#             "INSERT INTO workouts (name, muscle group, duration) VALUES (?, ?, ?)",
-#             (name, muscle_group, duration)
-#         )
-#     conn.commit()
-#     conn.close()
-#     print("Database seeded with workout data!")
-
-# if __name__ == "__main__":
-#     seed_workouts()
