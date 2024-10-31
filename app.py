@@ -20,16 +20,16 @@ def show(id):
 @app.route("/workouts.json", methods=["POST"])
 def create():
     name = request.form.get("name")
-    type = request.form.get("type")
+    muscle_group = request.form.get("muscle group")
     duration = request.form.get("duration")
-    return db.workouts_create(name, type, duration)
+    return db.workouts_create(name, muscle_group, duration)
 
 @app.route("/workouts/<id>.json", methods=["PATCH"])
 def update(id):
     name = request.form.get("name")
-    type = request.form.get("type")
+    muscle_group = request.form.get("muscle group")
     duration = request.form.get("duration")
-    return db.workouts_update_by_id(id, name, type, duration)
+    return db.workouts_update_by_id(id, name, muscle_group, duration)
 
 @app.route("/workouts/<id>.json", methods=["DELETE"])
 def destroy(id):

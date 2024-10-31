@@ -27,23 +27,34 @@ def initial_setup():
     conn.commit()
     print("Table created successfully")
 
-    workouts_seed_data = [
+workouts_seed_data = [
         ("1st workout", "arms", "1min"),
         ("2nd workout", "legs", "2min"),
         ("3rd workout", "back", "3min"),
     ]
-    conn.executemany(
-        """
-        INSERT INTO workouts (name, muscle group, duration)
-        VALUES (?,?,?)
-        """,
-        workouts_seed_data,
-    )
+
+def connect_to_db():
+    return sqlite3.connect("your_database.db")
+
+# Function to seed the workouts data
+def seed_workouts():
+    conn = connect_to_db()
+    cursor = conn.cursor()
+
+    for name, muscle_group, duration in workouts_seed_data:
+        cursor.execute(
+            "INSERT INTO workouts (name, muscle group, duration) VALUES (?, ?, ?)",
+            (name, muscle_group, duration)
+        )
     conn.commit()
-    print("Seed data created successfully")
-
     conn.close()
+    print("Database seeded with workout data!")
 
+if __name__ == "__main__":
+    seed_workouts()
+
+if __name__ == "__main__":
+    seed_workouts()
 
 if __name__ == "__main__":
     initial_setup()
@@ -72,7 +83,7 @@ def workouts_create(name, type, duration):
     conn = connect_to_db()
     row = conn.execute(
         """
-        INSERT INTO workouts (name, type, duration)
+        INSERT INTO workouts (name, muscle group, duration)
         VALUES (?, ?, ?)
         RETURNING *
         """,
@@ -86,7 +97,7 @@ def workouts_update_by_id(id, name, type, duration):
     try:
         row = conn.execute(
             """
-            UPDATE workouts SET name = ?, type = ?, duration = ?
+            UPDATE workouts SET name = ?, muscle group = ?, duration = ?
             WHERE id = ?
             RETURNING *
             """,
